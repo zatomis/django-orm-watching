@@ -19,16 +19,15 @@ def is_visit_long(visit, minutes = 15):
         return False
 
 def passcard_info_view(request, passcode):
-    passcard = Passcard.objects.all().first()
+    passcard = Passcard.objects.first()
     this_passcard_visits = []
     time_now = localtime(now())
     passcard_visit = Visit.objects.filter(passcard=passcard)
-    if len(passcard_visit) != 0:
-        for visit in passcard_visit:
-            this_passcard_visits.append(
-                dict(entered_at=visit.entered_at,
-                     duration=normal_time(localtime(visit.entered_at), localtime(visit.leaved_at)),
-                     is_strange=is_visit_long(visit, 1000)))
+    for visit in passcard_visit:
+        this_passcard_visits.append(
+            dict(entered_at=visit.entered_at,
+                 duration=normal_time(localtime(visit.entered_at), localtime(visit.leaved_at)),
+                 is_strange=is_visit_long(visit, 1000)))
     context = {
         'passcard': passcard,
         'this_passcard_visits': this_passcard_visits
